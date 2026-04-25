@@ -24,8 +24,6 @@ const deepseek = DEEPSEEK_API_KEY ? new OpenAI({
 
 const DEEPSEEK_MODEL = process.env.DEEPSEEK_MODEL || "deepseek-chat";
 
-const DEEPSEEK_MODEL = process.env.DEEPSEEK_MODEL || "deepseek-chat";
-
 const app = express();
 app.use(cors());
 app.use(express.json());
