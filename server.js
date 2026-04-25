@@ -12,10 +12,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // --- DeepSeek 客户端 ---
-const deepseek = new OpenAI({
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
+if (!DEEPSEEK_API_KEY) {
+    console.error("❌ DEEPSEEK_API_KEY 未设置，AI 功能将不可用");
+}
+
+const deepseek = DEEPSEEK_API_KEY ? new OpenAI({
     baseURL: "https://api.deepseek.com/v1",
-    apiKey: process.env.DEEPSEEK_API_KEY,
-});
+    apiKey: DEEPSEEK_API_KEY,
+}) : null;
+
+const DEEPSEEK_MODEL = process.env.DEEPSEEK_MODEL || "deepseek-chat";
 
 const DEEPSEEK_MODEL = process.env.DEEPSEEK_MODEL || "deepseek-chat";
 
@@ -25,6 +32,9 @@ app.use(express.json());
 
 // --- 测试接口 ---
 app.get("/api/test", async (req, res) => {
+    if (!deepseek) {
+        return res.json({ ok: false, message: "DeepSeek 未配置：缺少 DEEPSEEK_API_KEY" });
+    }
     try {
         await deepseek.chat.completions.create({
             model: DEEPSEEK_MODEL,
@@ -39,6 +49,12 @@ app.get("/api/test", async (req, res) => {
 
 // --- 用户问题分类接口 ---
 app.post("/api/classify-question", async (req, res) => {
+    if (!deepseek) {
+        return res.json({
+            ok: true,
+            data: { mainCategory: "事业", subCategory: "一般问事", intent: "是否行动", emotion: "未识别", riskLevel: "中", keywords: [], shortUnderstanding: "AI 未配置，使用默认分类。" },
+        });
+    }
     try {
         const { question, sign, questionType } = req.body;
 
@@ -81,6 +97,22 @@ app.post("/api/classify-question", async (req, res) => {
 
 // --- 卦象解读接口 ---
 app.post("/api/oracle-reading", async (req, res) => {
+    if (!deepseek) {
+        return res.json({
+            ok: true,
+            data: {
+                title: "AI 未配置",
+                summary: "DeepSeek API 密钥未设置，请在环境变量中添加 DEEPSEEK_API_KEY。",
+                situation: "暂无 AI 解读。",
+                advice: "先按卦象的行动建议执行。",
+                risk: "暂无",
+                timing: "暂无",
+                suitable: [],
+                unsuitable: [],
+                finalWords: "配置 API 密钥后即可获得 AI 解读。",
+            },
+        });
+    }
     try {
         const { scene, question, zodiac, classification, oracle, relationship } = req.body;
 
