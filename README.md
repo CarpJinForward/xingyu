@@ -1,16 +1,54 @@
-# React + Vite
+# 星语 AstroWhisper
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+星语 AstroWhisper 是一个基于 **React + Vite + Node.js / Express + 大模型 API** 构建的 AI 星座与玄学问事网站。
 
-Currently, two official plugins are available:
+项目核心目标是把传统星座、塔罗、卦象、情感分析等固定文案内容，升级为一个可以根据用户自然语言问题进行理解、分类、生成和深度解读的 AI Agent 应用。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 项目介绍
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+传统星座或玄学类网站通常是固定内容展示，例如每日运势、星座配对、模板化情感分析等。  
+本项目希望通过 AI Agent 的方式，让用户可以直接输入自己的真实问题，由系统自动判断问题类型，并生成更贴合个人情况的解读结果。
 
-## Expanding the ESLint configuration
+项目目前已实现一个可运行的前后端原型，包括：
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 动态星空视觉界面
+- 星座配对
+- 每日运势
+- AI 星卦问事
+- AI 情感起卦
+- 问题自动归类
+- 卦象 / 情感分析生成
+- 深度解读展开
+- 前后端接口联动
+- 大模型 API 调用
+
+---
+
+## 核心逻辑流
+
+本项目不是简单接入一个 AI 聊天框，而是围绕“玄学问事”场景设计了一套完整的 AI 处理链路。
+
+整体流程如下：
+
+```text
+用户输入问题
+    ↓
+前端收集问题内容和功能场景
+    ↓
+请求发送到 Node / Express 后端
+    ↓
+后端进行参数校验和场景识别
+    ↓
+AI 判断用户问题类型
+    ↓
+根据问题类型匹配不同 Prompt 模板
+    ↓
+调用大模型生成卦象、分析和建议
+    ↓
+后端整理返回结构化结果
+    ↓
+前端以卡片形式展示 AI 解读
+    ↓
+用户可继续展开深度解读
